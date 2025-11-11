@@ -8,25 +8,51 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Dashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard)
 
-        val dataList = arrayListOf(
-            Mahasiswa("Nasylla Ajeng Kirani", "24.12.3105"),
-            Mahasiswa("Raisha Akmala Rizqyah", "24.12.3100"),
-            Mahasiswa("Calista Sasikirana", "24.12.3104"),
-            Mahasiswa("Mahadewi Sabrina Putri", "24.12.3112")
-        )
+        val bottomNav: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-        val rvMahasiswa: RecyclerView = findViewById(R.id.rv_mahasiswa)
-        rvMahasiswa.layoutManager = GridLayoutManager(this, 2)
-        val adapter = MahasiswaAdapter(dataList)
-        rvMahasiswa.adapter = adapter
+        // 1. Muat Fragment default (Dashboard) saat pertama kali dibuka
+        loadFragment(DashboardFragment())
+
+        // 2. Tambahkan listener untuk menangani klik item navigasi
+        bottomNav.setOnItemSelectedListener { item ->
+            var fragment: Fragment
+            when (item.itemId) {
+                R.id.nav_dashboard -> {
+                    fragment = DashboardFragment()
+                    loadFragment(fragment)
+                    true // Mengembalikan true menandakan item telah ditangani
+                }
+                R.id.nav_profile -> {
+                    fragment = ProfileFragment()
+                    loadFragment(fragment)
+                    true
+                }
+                R.id.nav_settings -> {
+                    fragment = SettingFragment()
+                    loadFragment(fragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
+
+    // 3. Buat fungsi helper untuk memuat Fragment
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container_home, fragment)
+            .commit()
+    }
+
 }

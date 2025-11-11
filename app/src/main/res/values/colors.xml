@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="amikom">#4A148C</color>
+    <color name="purple_500">#481C85</color>
 </resources>
